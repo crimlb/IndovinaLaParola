@@ -6,14 +6,14 @@ var elementoPunti = document.getElementById("idPunteggio")
 var arrayVocali = ["a", "e", "i", "o", "u", "à", "è", "é", "ì", "ò", "ù"]
 
 var musicaAttiva;
-var sottofondo = new Audio("/sottofondoTrovaLaParola.mp3");
+var sottofondo = new Audio("./sottofondoTrovaLaParola.mp3");
 sottofondo.volume = 0.2;
 sottofondo.loop = true;
 
-var error= new Audio("/error.mp3");
+var error= new Audio("./error.mp3");
 error.volume= 0.1;
 
-var drinVocale= new Audio("/drinDrin.mp3")
+var drinVocale= new Audio("./drinDrin.mp3")
 drinVocale.volume= 0.5;
 
   document.addEventListener("DOMContentLoaded", startGame, { once: true });
