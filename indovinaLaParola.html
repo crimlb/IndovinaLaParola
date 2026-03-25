@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="indovinaLaParola.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Indovina La Parola</title>
+</head>
+
+<body>
+
+    <div>
+
+        <div id="idParolaIniziale">
+            <button id="idBtnRandom" onclick="fraseCasuale()">Frase Casuale</button>
+            <h1 class="TestoH1">Inserisci una frase o una parola</h1>
+
+            <form onsubmit="inserisciParola(); return false;">
+                <input oninput="conteggioCaratteriDigitati()" id="idInputParola" placeholder="Scrivi qualcosa..."
+                    type="text">
+                <button id="idBtnParola" type="submit">Inserisci</button>
+            </form>
+
+            <h4 id="alertLimite" class="nascondere">Limite superato</h4>
+
+        </div>
+
+        <div id="idContenitoreLettere"></div>
+
+        <div class="idDivPunteggio">
+            <h4 id="idPunteggio">Punteggio: 0</h4>
+            <button id="idBtnInfoPunteggio" onclick="btnInfoPunteggio()">Info</button>
+        </div>
+
+        <div id="idDivContatore" class="nascondere">
+            <h2 id="idContatoreErrori">Contatore Errori: 5</h2>
+            <form onsubmit="inserisciLettera(); return false;">
+                <input oninput="letteraSingola()" id="idInputLettera" type="text">
+                <button id="idBtnLettera" type="submit">Inserisci</button>
+            </form>
+        </div>
+
+        <div class="divParolaCreata" id="idParolaCreata"></div>
+
+        <footer class="footerIniziale">
+            <h3 class="nascondere" id="idH3">Hai la soluzione?</h3>
+
+            <form onsubmit="soluzione() ; return false;">
+                <input oninput="tentativoSoluzione()" class="nascondere" id="idInputSoluzione"
+                    placeholder="Prova a scriverla qui!" type="text">
+            </form>
+
+            <button id="idMic" class="nascondere" onclick="startMicrofono()">
+                <img src="microfono.svg" alt="Soluzione Vocale" title="soluzione vocale"></button>
+
+            <div><button class="volume" id="toggleMusic" onclick="musicaOnOff()">
+                <img src="volume10.png" width="70" height="70" title="volume"></button>
+            </div>
+
+        </footer>
+
+    </div>
+   
+</body>
+ <script src="indovinaLaParola.js"></script>
+</html>
