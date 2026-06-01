@@ -1,3 +1,7 @@
+# Link alla Demo: https://indovina-la-parola.vercel.app/
+
+---
+
 # 🔤 Indovina La Parola
 
 Un gioco web ispirato alla **Ruota della Fortuna**, interamente realizzato in **HTML, CSS e JavaScript vanilla**.
