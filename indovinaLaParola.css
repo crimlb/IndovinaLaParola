@@ -1,200 +1,319 @@
+/* =========================
+   BASE
+========================= */
+
 body {
-    display: fixed;
-    /* Gradiente obliquo a 3 colori con centro sfumato */
-    background-image: linear-gradient(135deg,
-            #9869fc -50%,
-            /* Colore 1 (Inizio) */
-            #d5f2d5 50%,
-            /* Colore 2 (Centro sfumato) */
-            #9869fc 150%
-            /* Colore 3 (Fine) */
-        )
+    min-height: 100vh;
+    margin: 0;
+
+    background-image: linear-gradient(
+        135deg,
+        #9869fc -50%,
+        #d5f2d5 50%,
+        #9869fc 150%
+    );
+
+    font-family: monospace;
 }
 
-.volume {
+.game-title {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+
+    color: #bfa5f8; /* stesso viola dei tuoi testi */
+    -webkit-text-stroke: 1px black;
+
+    text-shadow: 0 6px 15px rgba(191, 165, 248, 0.35);
+
+    position: relative;
+}
+
+/* piccola “bar” decorativa sotto il titolo */
+.game-title::after {
+    content: "";
+    display: block;
+
+    width: auto;
+    height: 4px;
+    margin: 10px auto 0;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #bfa5f8,
+        #c2e7c2,
+        #bfa5f8,
+        transparent
+    );
+
+    border-radius: 10px;
+    opacity: 0.9;
+}
+
+
+
+/* ===== OVERLAY BLUR BACKGROUND ===== */
+.rotate-overlay {
     position: fixed;
-    bottom: -2vh;
-    right: 0vh;
-    background: transparent;
-    border: transparent;
-}
+    inset: 0;
 
-.nascondere {
-    display: none;
-}
-
-.idDivPunteggio {
     display: flex;
-    position: fixed;
-    top: 0px;
-    gap: 10px;
-    left: 10px;
-    z-index: 1000;
-    align-items: baseline;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    z-index: 9999;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
-#idBtnInfoPunteggio {
-    background-color: #bfa5f8;
-    font-size: 3vh;
-    border-radius: 7px;
-    cursor: pointer;
+.rotate-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
 }
 
-#idMic {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
+/* ===== POPUP STYLE ===== */
+.rotate-box {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 16px;
+    width: min(90%, 320px);
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 
+    transform: scale(0.85);
+    opacity: 0;
+    animation: popIn 0.25s ease forwards;
 }
 
-#idMic img {
-    width: 50px;
-    height: 50px;
-    position: fixed;
-    bottom: 6px;
+/* animazione tipo Wordle */
+@keyframes popIn {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
+
+/* classe utility */
+.nascondere {
+    display: none !important;
+}
+
+/* =========================
+   TITOLI
+========================= */
 
 .TestoH1 {
-    margin-bottom: 24px;
-    margin-top: -32px;
     text-align: center;
-    font-size: 9vh;
-    font-family: monospace;
     color: #bfa5f8;
     -webkit-text-stroke: 1px black;
-}
 
+    font-size: clamp(2rem, 5vw, 4rem);
+
+    margin: 2rem 1rem;
+}
 
 #idContatoreErrori {
-    margin-bottom: 21px;
-    margin-top: 24px;
     text-align: center;
-    font-size: 9vh;
-    font-family: monospace;
     color: #bfa5f8;
     -webkit-text-stroke: 1px black;
+
+    font-size: clamp(2rem, 5vw, 4rem);
+
+    margin: 1.5rem 0;
 }
 
-.alertLimite {
-    display: block;
-    color: red;
-    text-align: center;
-    font-family: monospace;
-    font-size: larger;
-    margin-top: 0px;
-}
+/* =========================
+   INPUT
+========================= */
 
 #idInputParola {
-    width: 120vh;
-    margin-left: 26%;
-    font-size: 8vh;
+    width: 100%;
+    max-width: 700px;
+
+    font-size: clamp(1.2rem, 3vw, 2rem);
     text-align: center;
 }
 
 #idInputLettera {
-    width: 10vh;
-    margin-left: 46%;
-    font-size: 8vh;
+    width: 80px;
+
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
     text-align: center;
-    margin-top: -7px;
-    margin-bottom: -1px;
-}
-
-
-#idBtnParola,
-#idBtnLettera {
-    background-color: #bfa5f8;
-    font-size: 5vh;
-    border-radius: 7px;
-    cursor: pointer;
-    position: relative;
-    top: -0.5rem;
-    right: -5rem;
-}
-
-#idBtnRandom {
-    background-color: #bfa5f8;
-    font-size: 5vh;
-    border-radius: 7px;
-    cursor: pointer;
-    top: 7.5rem;
-    left: 5rem;
-    position: relative;
-}
-
-.divParolaCreata {
-    margin-top: 2vh;
-    justify-content: center;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    align-items: center;
-    flex-direction: row;
-    text-align: center;
-    height: 320px;
-    border: 2px solid black;
-    overflow: hidden;
-}
-
-.inputLettera {
-    /* width: 10vh; */
-    margin: 2vh;
-    border: none;
-    border-bottom: 2px solid black;
-    outline: none;
-    font-size: 10vh;
-    text-align: center;
-    background: transparent;
-}
-
-.inputApostrofo {
-    margin: -3vh;
-    border: none;
-    outline: none;
-    font-size: 10vh;
-    text-align: start;
-    background: transparent;
-}
-
-.inputSpazio {
-    width: 4vh;
-    margin: 2vh;
-    border: none;
-    background: black;
-    height: 0px;
 }
 
 #idInputSoluzione {
-    width: 65vh;
-    margin-left: 10px;
+    width: 100%;
+    max-width: 500px;
+
     text-align: center;
 }
 
+/* =========================
+   BOTTONI
+========================= */
 
-.footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #bfa5f8;
-    color: #fff;
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    border: 2px solid #020202;
+button {
+    cursor: pointer;
 }
+
+#idBtnParola,
+#idBtnLettera,
+#idBtnRandom,
+#idBtnInfoPunteggio,
+#idBtnRotate{
+    background-color: #bfa5f8;
+    border-radius: 8px;
+    border: none;
+
+    padding: 0.5rem 1rem;
+
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+}
+
+#idBtnRandom {
+    display: block;
+    margin: 1rem auto;
+}
+
+/* microfono */
+#idMic {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#idMic img {
+    width: 45px;
+    height: 45px;
+}
+
+/* volume */
+.volume {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+
+    background: transparent;
+    border: none;
+}
+
+/* =========================
+   PUNTEGGIO
+========================= */
+
+.idDivPunteggio {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    z-index: 1000;
+}
+
+/* =========================
+   AREA LETTERE
+========================= */
+
+#idContenitoreLettere {
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+    gap: 10px;
+
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* =========================
+   PAROLA CREATA
+========================= */
+
+.divParolaCreata {
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: center;
+    align-items: center;
+
+    min-height: 250px;
+
+    border: 2px solid black;
+
+    margin: 1rem auto;
+    padding: 1rem;
+
+    max-width: 900px;
+}
+
+/* lettere generate dal JS */
+.inputLettera {
+    margin: 6px;
+
+    border: none;
+    border-bottom: 2px solid black;
+    outline: none;
+
+    background: transparent;
+
+    text-align: center;
+
+    font-size: clamp(2rem, 5vw, 3rem);
+
+    width: 50px;
+}
+
+.inputApostrofo {
+    font-size: clamp(2rem, 5vw, 3rem);
+    background: transparent;
+    border: none;
+}
+
+.inputSpazio {
+    width: 20px;
+    height: 2px;
+    background: black;
+    border: none;
+}
+
+/* =========================
+   FOOTER
+========================= */
 
 .footerIniziale {
     position: fixed;
-    bottom: 0px;
+    bottom: 0;
     left: 0;
-    padding: 29px;
+
     width: 100%;
+
     background-color: #bfa5f8;
-    color: #fff;
+    border-top: 2px solid #000;
+
     display: flex;
-    align-items: baseline;
+    flex-wrap: wrap;
     justify-content: center;
-    border: 2px solid #020202;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px;
+}
+
+/* evita che il footer copra il contenuto */
+body {
+    padding-bottom: 120px;
 }

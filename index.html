@@ -5,64 +5,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="indovinaLaParola.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Indovina La Parola</title>
 </head>
 
 <body>
+    <h1 class="text-center fw-bold text-uppercase game-title">
+        <span class="text-gradient">
+            Trova la Parola
+        </span>
+    </h1>
 
-    <div>
+    <div id="rotateScreen" class="rotate-overlay">
+        <div class="rotate-box">
+            <p class="fs-5 mb-2">📱 Ruota il tuo dispositivo</p>
+            <p class="text-muted mb-3">Per una migliore esperienza di gioco</p>
 
-        <div id="idParolaIniziale">
-            <button id="idBtnRandom" onclick="fraseCasuale()">Frase Casuale</button>
-            <h1 class="TestoH1">Inserisci una frase o una parola</h1>
-
-            <form onsubmit="inserisciParola(); return false;">
-                <input oninput="conteggioCaratteriDigitati()" id="idInputParola" placeholder="Scrivi qualcosa..."
-                    type="text">
-                <button id="idBtnParola" type="submit">Inserisci</button>
-            </form>
-
-            <h4 id="alertLimite" class="nascondere">Limite superato</h4>
-
+            <button id="idBtnRotate" class="btn text-white w-100 fw-semibold" onclick="closeRotateOverlay()">
+                Continua comunque
+            </button>
         </div>
+    </div>
 
-        <div id="idContenitoreLettere"></div>
+    <div class="container py-4">
 
-        <div class="idDivPunteggio">
-            <h4 id="idPunteggio">Punteggio: 0</h4>
-            <button id="idBtnInfoPunteggio" onclick="btnInfoPunteggio()">Info</button>
-        </div>
+        <div class="row justify-content-center">
 
-        <div id="idDivContatore" class="nascondere">
-            <h2 id="idContatoreErrori">Contatore Errori: 5</h2>
-            <form onsubmit="inserisciLettera(); return false;">
-                <input oninput="letteraSingola()" id="idInputLettera" type="text">
-                <button id="idBtnLettera" type="submit">Inserisci</button>
-            </form>
-        </div>
+            <div class="col-12 col-md-10 col-lg-8">
 
-        <div class="divParolaCreata" id="idParolaCreata"></div>
 
-        <footer class="footerIniziale">
-            <h3 class="nascondere" id="idH3">Hai la soluzione?</h3>
+                <!-- Inserimento parola -->
+                <div id="idParolaIniziale" class="text-center mb-4">
 
-            <form onsubmit="soluzione() ; return false;">
-                <input oninput="tentativoSoluzione()" class="nascondere" id="idInputSoluzione"
-                    placeholder="Prova a scriverla qui!" type="text">
-            </form>
+                    <button id="idBtnRandom" class="btn btn-primary mb-3" onclick="fraseCasuale()">
+                        Frase Casuale
+                    </button>
 
-            <button id="idMic" class="nascondere" onclick="startMicrofono()">
-                <img src="microfono.svg" alt="Soluzione Vocale" title="soluzione vocale"></button>
+                    <h1 class="display-6 mb-4 fw-normal">
+                        Inserisci una frase o una parola
+                    </h1>
 
-            <div><button class="volume" id="toggleMusic" onclick="musicaOnOff()">
-                <img src="volume10.png" width="70" height="70" title="volume"></button>
+                    <form class="d-flex flex-column flex-md-row gap-2 justify-content-center"
+                        onsubmit="inserisciParola(); return false;">
+
+                        <input oninput="conteggioCaratteriDigitati()" id="idInputParola" class="form-control"
+                            placeholder="Scrivi qualcosa..." type="text">
+
+                        <button id="idBtnParola" class="btn text-white">
+                            Inserisci
+                        </button>
+
+                    </form>
+
+                    <h4 id="alertLimite" class="nascondere mt-3">
+                        Limite superato
+                    </h4>
+
+                </div>
+
+                <!-- Lettere -->
+                <div id="idContenitoreLettere" class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+                </div>
+
+                <!-- Punteggio -->
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 mb-4">
+
+                    <h4 id="idPunteggio" class="mb-0">
+                        Punteggio: 0
+                    </h4>
+
+                    <button class="btn btn-info text-white" id="idBtnInfoPunteggio" onclick="btnInfoPunteggio()">
+                        Info
+                    </button>
+
+                </div>
+
+                <!-- Contatore -->
+                <div id="idDivContatore" class="nascondere text-center mb-4">
+
+                    <h2 id="idContatoreErrori" class="mb-3">
+                        Contatore Errori: 5
+                    </h2>
+
+                    <form class="d-flex flex-column flex-sm-row gap-2 justify-content-center"
+                        onsubmit="inserisciLettera(); return false;">
+                        <div class="d-flex justify-content-center">
+                            <input oninput="letteraSingola()" id="idInputLettera" class="form-control text-center"
+                                maxlength="1" type="text">
+                        </div>
+
+
+                        <button id="idBtnLettera" class="btn text-white ">
+                            Inserisci
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <!-- Parola -->
+                <div class="divParolaCreata text-center mb-4" id="idParolaCreata">
+                </div>
+
+                <!-- Footer -->
+                <footer class="d-flex flex-column align-items-center gap-3">
+
+
+
+                    <div class="w-100 d-flex align-items-center gap-2 justify-content-center flex-wrap">
+
+                        <!-- INPUT SOLUZIONE -->
+                        <form class="flex-grow-1" onsubmit="soluzione(); return false;">
+                            <h3 class="nascondere" id="idH3">
+                                Hai la soluzione?
+                            </h3>
+                            <input oninput="tentativoSoluzione()" class="form-control nascondere text-center"
+                                id="idInputSoluzione" placeholder="Prova a scriverla qui!" type="text">
+
+                        </form>
+
+                        <!-- MIC -->
+                        <button id="idMic" class="btn btn-outline-secondary nascondere mt-4" onclick="startMicrofono()">
+
+                            <img src="microfono.svg" alt="Microfono" width="30">
+                        </button>
+
+                        <!-- VOLUME -->
+                        <button class="btn mt-4" id="toggleMusic" onclick="musicaOnOff()">
+
+                            <img src="volume10.png" width="70" height="70" alt="Volume">
+                        </button>
+
+                    </div>
+
+                </footer>
+
             </div>
 
-        </footer>
+        </div>
 
     </div>
-   
+
+    <script src="indovinaLaParola.js"></script>
+
 </body>
- <script src="indovinaLaParola.js"></script>
+
 </html>

@@ -16,6 +16,42 @@ error.volume= 0.1;
 var drinVocale= new Audio("./drinDrin.mp3")
 drinVocale.volume= 0.5;
 
+var userIgnoresRotation = false;
+
+// 🔄 controllo orientamento
+function checkOrientation() {
+    const overlay = document.getElementById("rotateScreen");
+
+    if (userIgnoresRotation) return;
+
+    const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+
+    if (window.innerWidth < 768 && isPortrait) {
+        overlay.classList.add("show");
+    } else {
+        overlay.classList.remove("show");
+    }
+}
+
+function closeRotateOverlay() {
+    userIgnoresRotation = true;
+
+    const overlay = document.getElementById("rotateScreen");
+    overlay.classList.remove("show");
+}
+
+// 🔄 riattiva suggerimento (opzionale)
+function suggestRotate() {
+    const overlay = document.getElementById("rotateScreen");
+    overlay.classList.add("show");
+}
+
+window.addEventListener("load", checkOrientation);
+window.addEventListener("resize", () => {
+    setTimeout(checkOrientation, 150);
+});
+window.addEventListener("orientationchange", checkOrientation);
+
   document.addEventListener("DOMContentLoaded", startGame, { once: true });
 
 function startGame(){
