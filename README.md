@@ -95,3 +95,17 @@ Non è richiesta alcuna installazione. Il progetto è **100% client-side**.
 - Le vocali vengono normalizzate (rimozione accenti) per il confronto, così `è`, `é` e `e` sono equivalenti durante il gioco.
 - La lista frasi casuali viene consumata senza ripetizioni fino all'esaurimento completo.
 - Il testo-in-voce usa la prima voce italiana disponibile nel browser tramite `SpeechSynthesis`.
+
+---
+
+👩‍💻 Autrice
+[Cristina Buffone]
+
+GitHub: @crimlb
+LinkedIn: linkedin.com/in/cristina-buffone-576893316/
+Email: crimlb87@gmail.com
+
+---
+
+📄 Licenza
+Questo progetto è a scopo didattico e di portfolio. Non è consentito il riutilizzo del codice senza autorizzazione.
