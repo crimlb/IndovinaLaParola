@@ -120,20 +120,31 @@ function startMicrofono() {
    recognition.start();
 }
 
+let voci = [];
+let voceItaliana = null;
+
+function caricaVoci() {
+    voci = window.speechSynthesis.getVoices();
+    voceItaliana = voci.find(v => v.lang === "it-IT") || voci[0] || null;
+}
+
+if (window.speechSynthesis) {
+    caricaVoci();
+    window.speechSynthesis.onvoiceschanged = caricaVoci;
+}
+
 function parla(testo) {
 
     const synth = window.speechSynthesis;
+    if (!synth) return;
+
     const utterance = new SpeechSynthesisUtterance(testo);
 
-    if (voices.length > 0) {
-    utterance.voice = voices[0];
-}
-    // const voices = synth.getVoices();
+    if (voceItaliana) {
+        utterance.voice = voceItaliana;
+    }
 
-    // const voceItaliana = voices[0]  // 0-1-11 voci italiane
-
-    utterance.voice = voceItaliana;
-    utterance.pitch = 0; // tono (0 - 2)
+    utterance.pitch = 1; // tono (0 - 2)
     utterance.rate = 1.5;  // velocità (0.1 - 10)
     utterance.volume = 1;  // volume (0 - 1)
 
@@ -262,7 +273,7 @@ function inserisciLettera() {
             document.getElementById("idInputLettera").value = "";
             parla("Non hai punti sufficienti per comprare una vocale.")
             return Swal.fire({
-                icon: "Warning",
+                icon: "warning",
                 title: "Attenzione!",
                 text: "Non hai punti sufficienti per comprare una vocale.",
                 confirmButtonText: "OK"
