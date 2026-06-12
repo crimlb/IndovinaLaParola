@@ -17,7 +17,7 @@ body {
 }
 
 .game-title {
-    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-size: clamp(1.6rem, 5vw, 4rem);
     letter-spacing: 3px;
     text-transform: uppercase;
 
@@ -27,6 +27,9 @@ body {
     text-shadow: 0 6px 15px rgba(191, 165, 248, 0.35);
 
     position: relative;
+
+    margin: 0;
+    padding: 0.5rem 0;
 }
 
 /* piccola “bar” decorativa sotto il titolo */
@@ -122,14 +125,12 @@ body {
     margin: 2rem 1rem;
 }
 
-#idContatoreErrori {
-    text-align: center;
-    color: #bfa5f8;
-    -webkit-text-stroke: 1px black;
+.cuoricini {
+    display: inline-block;
 
-    font-size: clamp(2rem, 5vw, 4rem);
+    font-size: clamp(0.9rem, 3vw, 1.4rem);
 
-    margin: 1.5rem 0;
+    letter-spacing: 2px;
 }
 
 /* =========================
@@ -178,11 +179,42 @@ button {
     padding: 0.5rem 1rem;
 
     font-size: clamp(0.9rem, 2vw, 1.2rem);
+
+    white-space: nowrap;
 }
 
 #idBtnRandom {
     display: block;
     margin: 1rem auto;
+}
+
+#idBtnParola,
+#idBtnLettera {
+    align-self: center;
+}
+
+#idBtnNuovaPartita {
+    white-space: nowrap;
+}
+
+/* badge vocale */
+.badge-vocale {
+    background-color: #e0d4f7;
+    border: 1px solid black;
+    border-radius: 8px;
+
+    padding: 0.4rem 0.7rem;
+
+    font-size: clamp(0.8rem, 2vw, 1.1rem);
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    transition: background-color 0.2s ease;
+}
+
+.badge-vocale.badge-vocale-attivo {
+    background-color: #c2e7c2;
 }
 
 /* microfono */
@@ -193,49 +225,14 @@ button {
 }
 
 #idMic img {
-    width: 45px;
-    height: 45px;
+    width: clamp(28px, 6vw, 45px);
+    height: clamp(28px, 6vw, 45px);
 }
 
 /* volume */
-.volume {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-
-    background: transparent;
-    border: none;
-}
-
-/* =========================
-   PUNTEGGIO
-========================= */
-
-.idDivPunteggio {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    z-index: 2;
-}
-
-/* =========================
-   AREA LETTERE
-========================= */
-
-#idContenitoreLettere {
-    display: grid;
-
-    grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
-    gap: 10px;
-
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+#toggleMusic img {
+    width: clamp(40px, 8vw, 70px);
+    height: clamp(40px, 8vw, 70px);
 }
 
 /* =========================
@@ -249,9 +246,10 @@ button {
     justify-content: center;
     align-items: center;
 
-    min-height: 250px;
+    min-height: clamp(80px, 20vw, 250px);
 
     border: 2px solid black;
+    border-radius: 8px;
 
     margin: 1rem auto;
     padding: 1rem;
@@ -261,7 +259,7 @@ button {
 
 /* lettere generate dal JS */
 .inputLettera {
-    margin: 6px;
+    margin: 4px;
 
     border: none;
     border-bottom: 2px solid black;
@@ -271,15 +269,25 @@ button {
 
     text-align: center;
 
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(1.2rem, 5vw, 3rem);
 
-    width: 50px;
+    width: clamp(28px, 8vw, 50px);
+}
+
+.inputLettera.lettera-piccola {
+    font-size: clamp(0.9rem, 3.5vw, 2rem);
+    width: clamp(20px, 5vw, 36px);
 }
 
 .inputApostrofo {
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(1.2rem, 5vw, 3rem);
     background: transparent;
     border: none;
+    width: clamp(10px, 2vw, 20px);
+}
+
+.inputApostrofo.lettera-piccola {
+    font-size: clamp(0.9rem, 3.5vw, 2rem);
 }
 
 .inputSpazio {
@@ -287,33 +295,23 @@ button {
     height: 2px;
     background: black;
     border: none;
+    align-self: center;
 }
 
-/* =========================
-   FOOTER
-========================= */
-
-.footerIniziale {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-
-    width: 100%;
-
-    background-color: #bfa5f8;
-    border-top: 2px solid #000;
-
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 10px;
+/* animazione lettera indovinata */
+@keyframes popLetter {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+        color: #6f42c1;
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
-/* evita che il footer copra il contenuto */
-body {
-    padding-bottom: 120px;
+.pop-letter {
+    animation: popLetter 0.4s ease;
 }

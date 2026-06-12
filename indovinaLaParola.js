@@ -1,5 +1,8 @@
+const MAX_ERRORI = 5
+const COSTO_VOCALE = 5
+
 var inputParola = ""
-var totErrori = 5
+var totErrori = MAX_ERRORI
 var arrayLettere = []
 var punteggio = 0
 var elementoPunti = document.getElementById("idPunteggio")
@@ -15,6 +18,21 @@ error.volume = 0.1;
 
 var drinVocale = new Audio("./drinDrin.mp3")
 drinVocale.volume = 0.5;
+
+function aggiornaContatoreErrori() {
+    const span = document.getElementById("idContatoreErrori")
+    span.innerHTML = "❤️".repeat(Math.max(totErrori, 0)) + "🖤".repeat(Math.max(MAX_ERRORI - totErrori, 0))
+}
+
+function aggiornaBadgeVocale() {
+    const badge = document.getElementById("idBadgeVocale")
+    document.getElementById("idCostoVocale").textContent = COSTO_VOCALE
+    if (punteggio >= COSTO_VOCALE) {
+        badge.classList.add("badge-vocale-attivo")
+    } else {
+        badge.classList.remove("badge-vocale-attivo")
+    }
+}
 
 var userIgnoresRotation = false;
 
@@ -59,14 +77,40 @@ function startGame() {
     Swal.fire({
         title: "Nuova partita",
         text: "Pronto ad iniziare?",
-        icon: "welcome",
+        icon: "question",
         confirmButtonText: "OK"
     }).then((result) => {
         if (result.isConfirmed) {
             musicaOnOff();
         }
+        document.getElementById("idInputParola").focus();
     })
 
+}
+
+function nuovaPartita() {
+    Swal.fire({
+        title: "Nuova partita",
+        text: "Vuoi davvero iniziare una nuova partita? I progressi attuali andranno persi.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Sì, ricomincia",
+        cancelButtonText: "Annulla"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+        }
+    })
+}
+
+function lanciaConfetti() {
+    if (typeof confetti === "function") {
+        confetti({
+            particleCount: 150,
+            spread: 90,
+            origin: { y: 0.6 }
+        });
+    }
 }
 
 
@@ -125,7 +169,10 @@ let voceItaliana = null;
 
 function caricaVoci() {
     voci = window.speechSynthesis.getVoices();
-    voceItaliana = voci.find(v => v.lang === "it-IT") || voci[0] || null;
+    voceItaliana = voci.find(v => v.lang === "it-IT" && /google|natural|neural/i.test(v.name))
+        || voci.find(v => v.lang === "it-IT")
+        || voci[0]
+        || null;
 }
 
 if (window.speechSynthesis) {
@@ -145,7 +192,7 @@ function parla(testo) {
     }
 
     utterance.pitch = 1; // tono (0 - 2)
-    utterance.rate = 1.5;  // velocità (0.1 - 10)
+    utterance.rate = 1.15;  // velocità (0.1 - 10)
     utterance.volume = 1;  // volume (0 - 1)
 
     synth.speak(utterance);
@@ -162,10 +209,14 @@ function inserisciParola(fraseRandom) {
         divParolaIniziale.classList.add("nascondere")
 
         costruisciParola(inputParola)
+        document.getElementById("idParolaCreata").classList.remove("nascondere")
         document.getElementById("idH3").classList.remove("nascondere")
         document.getElementById("idInputSoluzione").classList.remove("nascondere")
         document.getElementById("idMic").classList.remove("nascondere")
-        document.querySelector(".footerIniziale").classList.replace("footerIniziale", "footer")
+        document.getElementById("idBadgeVocale").classList.remove("nascondere")
+        document.getElementById("idContatoreErrori").classList.remove("nascondere")
+        aggiornaContatoreErrori()
+        document.getElementById("idInputLettera").focus()
     } else {
         Swal.fire({
             title: "Info!",
@@ -178,6 +229,7 @@ function inserisciParola(fraseRandom) {
 function costruisciParola(parola) {
     let lunghezzaParola = parola.length
     const divParolaCreata = document.getElementById("idParolaCreata")
+    const parolaLunga = lunghezzaParola > 20
 
     for (let i = 0; i < lunghezzaParola; i++) {
         let carattere = parola[i].toUpperCase()
@@ -192,26 +244,16 @@ function costruisciParola(parola) {
         if (carattere === "'") {
             input.classList.add("inputApostrofo")
             input.value = carattere
+            if (parolaLunga) input.classList.add("lettera-piccola")
         }
 
         if (carattere === " ") {
             input.classList.add("inputSpazio")
         } else {
             input.classList.add("inputLettera")
-
-            if (lunghezzaParola > 30) {
-                input.style = "width: 8vh";
-            } else {
-                input.style = "width: 10vh";
-            }
+            if (parolaLunga) input.classList.add("lettera-piccola")
         }
         divParolaCreata.appendChild(input)
-    }
-
-    if (lunghezzaParola > 30) {
-        divParolaCreata.style = "font-size:8vh";
-    } else {
-        divParolaCreata.style = "font-size: 10vh";
     }
 }
 
@@ -221,10 +263,9 @@ function conteggioCaratteriDigitati() {
     if (parola.length > 50) {
         parola = parola.slice(0, 50)
 
-        document.getElementById("alertLimite").classList.add("alertLimite")
+        document.getElementById("alertLimite").classList.remove("nascondere")
     } else {
-        document.getElementById("idInputParola").style = "color:black;"
-        document.getElementById("alertLimite").classList.replace("alertLimite", "nascondere")
+        document.getElementById("alertLimite").classList.add("nascondere")
     }
     document.getElementById("idInputParola").value = parola
 }
@@ -255,12 +296,14 @@ function inserisciLettera() {
     if (letteraInserita === "" || letteraInserita === " ") return;
 
     if (arrayVocali.includes(letteraInserita.toLowerCase())) {
-        if (punteggio >= 5) {
-            document.getElementById("idPunteggio").textContent = "Punteggio: " + (punteggio -= 5)
+        if (punteggio >= COSTO_VOCALE) {
+            punteggio -= COSTO_VOCALE
+            document.getElementById("idPunteggio").textContent = "Punteggio: " + punteggio
+            aggiornaBadgeVocale()
             if (arrayLettere.includes(letteraInserita)) {
                 totErrori--
                 error.play()
-                document.getElementById("idContatoreErrori").innerText = "Tentativi rimasti: " + totErrori;
+                aggiornaContatoreErrori()
                 return Swal.fire({
                     title: "Info!",
                     text: "Vocale già inserita",
@@ -287,7 +330,7 @@ function inserisciLettera() {
         totErrori--
         noErrorDoppio = true;
         error.play()
-        document.getElementById("idContatoreErrori").innerText = "Tentativi rimasti: " + totErrori;
+        aggiornaContatoreErrori()
         Swal.fire({
             title: "Info!",
             text: "Lettera già inserita",
@@ -302,9 +345,11 @@ function inserisciLettera() {
         var vocaleFraseNonAccentata = inputParola[i].normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         if (vocaleFraseNonAccentata.toUpperCase() == vocaleNonAccentata.toUpperCase()) {
             inputParolaCreata[i].value = inputParola[i].toUpperCase()
+            inputParolaCreata[i].classList.add("pop-letter")
             if (i != 0 && i != lunghezzaParola - 1) {
                 punteggio++
                 elementoPunti.textContent = "Punteggio: " + punteggio
+                aggiornaBadgeVocale()
             } else {
                 noLettere++
             }
@@ -316,7 +361,7 @@ function inserisciLettera() {
     if (noLettere === lunghezzaParola && !noErrorDoppio) {
         totErrori--
         error.play()
-        document.getElementById("idContatoreErrori").innerText = "Tentativi rimasti: " + totErrori;
+        aggiornaContatoreErrori()
     }
     if (totErrori <= 0) {
         parla("Peccato, hai perso. La soluzione era: " + inputParola)
@@ -350,6 +395,7 @@ function soluzione(soluzioneVocale) {
     var parolaSenzaAccenti = parola.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()
     if (tentativoSoluzione === parolaSenzaAccenti) {
         parla("Complimenti hai trovato la soluzione")
+        lanciaConfetti()
         Swal.fire({
             title: "Hai vinto!",
             text: "Complimenti hai trovato la soluzione.",
@@ -386,6 +432,7 @@ function soluzioneLettere() {
     }
     if (counter == inputParola.replaceAll(" ", "").length) {
         parla("Complimenti hai trovato la soluzione")
+        lanciaConfetti()
         Swal.fire({
             title: "Hai vinto!",
             text: "Complimenti hai trovato la soluzione.",
